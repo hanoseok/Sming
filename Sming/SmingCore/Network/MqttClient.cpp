@@ -92,6 +92,11 @@ bool MqttClient::connect(const String& clientName, const String& username, const
 	return res > 0;
 }
 
+bool MqttClient::disconnect(){
+	int ret = mqtt_disconnect(&broker);
+	return ret > 0;
+}
+
 bool MqttClient::publish(String topic, String message, bool retained /* = false*/)
 {
 	int res = mqtt_publish(&broker, topic.c_str(), message.c_str(), retained);

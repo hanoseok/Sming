@@ -33,3 +33,6 @@
 	path = Sming/third-party/ws_parser
 	url = https://github.com/charliesome/ws_parser.git
 	ignore = dirty
+[submodule "Sming/Libraries/espsoftwareserial"]
+	path = Sming/Libraries/espsoftwareserial
+	url = https://github.com/hanoseok/espsoftwareserial

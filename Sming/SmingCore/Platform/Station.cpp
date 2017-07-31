@@ -279,6 +279,27 @@ bool StationClass::startScan(ScanCompletedDelegate scanCompleted)
 	return res;
 }
 
+void StationClass::waitConnection(ConnectionDelegate successfulConnected)
+{
+	waitConnection(successfulConnected, -1, NULL);
+}
+
+void StationClass::waitConnection(ConnectionDelegate successfulConnected, int secondsTimeOut, ConnectionDelegate connectionNotEstablished)
+{
+	if (onConnectOk || onConnectFail )
+	{
+		SYSTEM_ERROR("WRONG CALL waitConnection method..");
+		return;
+	}
+
+	onConnectOk = successfulConnected;
+	connectionTimeOut = secondsTimeOut;
+	onConnectFail = connectionNotEstablished;
+	connectionTimer = new Timer();
+	connectionTimer->initializeMs(50, staticCheckConnection).start();
+	connectionStarted = millis();
+}
+
 ////////////
 
 void StationClass::staticScanCompleted(void *arg, STATUS status)
@@ -315,6 +336,43 @@ void StationClass::onSystemReady()
 		wifi_station_scan(NULL, staticScanCompleted);
 		runScan = false;
 	}
+}
+
+void StationClass::internalCheckConnection()
+{
+	uint32 duration = millis() - connectionStarted;
+	if (isConnected())
+	{
+		ConnectionDelegate callOk = nullptr;
+		if (onConnectOk) {
+			callOk = onConnectOk;
+		}
+
+		onConnectOk = nullptr;
+		onConnectFail = nullptr;
+		delete connectionTimer;
+		connectionTimeOut = 0;
+
+		if (callOk) {
+			callOk();
+		}
+	}
+	else if (connectionTimeOut > 0 && duration > (uint32)connectionTimeOut * 1000)
+	{
+		ConnectionDelegate call = onConnectFail;
+		onConnectOk = nullptr;
+		onConnectFail = nullptr;
+		delete connectionTimer;
+		connectionTimeOut = 0;
+
+		if (call)
+			call();
+	}
+}
+
+void StationClass::staticCheckConnection()
+{
+	WifiStation.internalCheckConnection();
 }
 
 const char* StationClass::getConnectionStatusName()

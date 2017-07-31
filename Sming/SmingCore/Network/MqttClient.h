@@ -43,6 +43,7 @@ public:
 
 	bool connect(const String& clientName, boolean useSsl = false, uint32_t sslOptions = 0);
 	bool connect(const String& clientName,const String& username, const String& password, boolean useSsl = false, uint32_t sslOptions = 0);
+	bool disconnect();
 
 	using TcpClient::setCompleteDelegate;
 
