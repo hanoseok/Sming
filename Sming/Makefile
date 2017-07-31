@@ -6,6 +6,8 @@
 #
 #############################################################
 
+include Makefile-esp.mk
+
 ## Defaults for Sming Core
 
 ## ESP_HOME sets the path where ESP tools and SDK are located.
