@@ -43,6 +43,8 @@ public:
 	__forceinline bool isProcessing()  { return TcpClient::isProcessing(); }
 	__forceinline TcpClientState getConnectionState() { return TcpClient::getConnectionState(); }
 
+	bool disconnect();
+
 	bool publish(String topic, String message, bool retained = false);
 	bool publishWithQoS(String topic, String message, int QoS, bool retained = false, MqttMessageDeliveredCallback onDelivery = NULL);
 
