@@ -25,3 +25,6 @@
 	path = Sming/third-party/esp-open-lwip
 	url = https://github.com/pfalcon/esp-open-lwip.git
 	ignore = dirty
+[submodule "Sming/Libraries/espsoftwareserial"]
+	path = Sming/Libraries/espsoftwareserial
+	url = https://github.com/hanoseok/espsoftwareserial
